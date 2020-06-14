@@ -17,32 +17,38 @@ letter = Item('Letter',
 
 # Declare all the rooms
 
-outside = Room("""Great dark cliffs bordering the brackish, roaring waters. """
-               """The cliffs seem to be made of a black oily stone""",
-               """Up ahead is is a small, strange shrine that seems to make the area around it get darker""", [torch])
-foyer = Room("The shrine", """Dim light filters in from the south. Dusty
-passages run north and east.""", [tome])
-overlook = Room("A view into the abyss", """A steep cliff appears before you, falling
-into the darkness. Ahead to the north, a light flickers in
-the distance, but there is no way across the chasm.""", [athame])
-narrow = Room("Narrow Passage", """The narrow passage bends here from west
-to north. The smell of gold permeates the air.""", [phylactery, finger])
-treasure = Room("Treasure Chamber", """You've found the long-lost treasure
+cliffs = Room("Great dark cliffs", """Bordering the brackish, roaring waters. """
+                                   """You wake up on a freezing, jagged bed of rock...
+The cliffs seem to be made of a black oily stone.
+How did you get here? What happened before this?
+Up ahead is is a small, strange shrine that seems to make the area around it get darker""", [torch])
+shrine = Room("The shrine",
+              """Carved in the black oily stone, """ """is a strange arcane idol sitting among countless lit candles""",
+              [tome])
+stairs = Room("Stairs", """A seemingly endless flight of steps lies before you, with each step a powerful 
+miasma takes hold of you. Your vision begins tunneling. There is a glimmer of a bloodied, silvery blade""", [athame])
+eyrie = Room("Eyrie", """Finally reaching the top of the stairs, your vision is not just tunneling,
+but you're seeing trails and can scarcely breathe.
+High among the clouds is the eyrie overlooking the black abyss you came from.
+You swear, for a moment you saw hooded figures praying to the ocean...
+but it must've been your eyes playing tricks on you.
+The winds are punishing, and the saltwater is chafing your face""", [phylactery, finger])
+altar = Room("The cursed altar", """You've found the long-lost treasure
 chamber! Sadly, it has already been completely emptied by
 earlier adventurers. The only exit is to the south.""", [letter])
 # Link rooms together
-outside.n_to = foyer
-foyer.s_to = outside
-foyer.n_to = overlook
-foyer.e_to = narrow
-overlook.s_to = foyer
-narrow.w_to = foyer
-narrow.n_to = treasure
-treasure.s_to = narrow
+cliffs.n_to = shrine
+shrine.s_to = cliffs
+shrine.n_to = stairs
+shrine.e_to = eyrie
+stairs.s_to = shrine
+eyrie.w_to = shrine
+eyrie.n_to = altar
+altar.s_to = eyrie
 
 player = Player()
 player.name = 'Anthony'
-player.current_room = outside
+player.current_room = cliffs
 item = player.items
 
 
@@ -64,9 +70,9 @@ while True:
         action_choice = input('Enter (E) to examine items, (GET) to pick up items, (I) for inventory: ')
         if action_choice in {'e'}:
             print(repr(player.current_room.items))
-        elif action_choice in {'get '}:
-            pickup = input(f'Get: {str(player.current_room.items[0])}? (Y or N)')
-
+        elif 'get ' in action_choice:
+            item_unit = action_choice.replace('get ', '')
+            pickup = input(f'Get: {item_unit}? (Y or N)')
             print(pickup)
             if pickup in {'y'}:
                 item.insert(0, player.current_room.items[0])
