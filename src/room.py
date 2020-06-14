@@ -1,7 +1,8 @@
 class Room:
-    def __init__(self, name, description):
+    def __init__(self, name, description, items=[]):
         self.name = name
         self.description = description
+        self.items = list(items)
         self.s_to = None
         self.e_to = None
         self.w_to = None
@@ -18,3 +19,4 @@ class Room:
         if self.n_to:
             output += 'To the north is: ' + self.n_to.name + '\n'
         return output
+
